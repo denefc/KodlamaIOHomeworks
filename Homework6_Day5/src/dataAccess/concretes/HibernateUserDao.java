@@ -49,6 +49,16 @@ public class HibernateUserDao implements UserDao {
     }
 
     @Override
+    public User getByEmailAndPassword(String email, String password) {
+        for (User user:users){
+            if (user.getEmail().equals(email)&&user.getPassword().equals(password)){
+                return user;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public List<User> getAll() {
         return users;
     }

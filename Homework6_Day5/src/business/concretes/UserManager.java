@@ -1,6 +1,7 @@
 package business.concretes;
 
 import business.abstracts.UserService;
+import business.abstracts.ValidationService;
 import dataAccess.abstracts.UserDao;
 import entities.concretes.User;
 
@@ -10,14 +11,24 @@ import java.util.List;
 public class UserManager implements UserService {
 
     private UserDao userDao;
+    private ValidationService validationService;
 
-    public UserManager(UserDao userDao) {
+    public UserManager(UserDao userDao, ValidationService validationService) {
         this.userDao = userDao;
+        this.validationService = validationService;
+    }
+
+
+    @Override
+    public void register(User user) {
+        userDao.add(user);
+        System.out.println("Kullanıcı eklendi");
     }
 
     @Override
-    public void add(User user) {
-        userDao.add(user);
+    public void login(User user) {
+        verify(user.getId());
+        System.out.println("Kullanıcı giriş yaptı");
     }
 
     @Override
@@ -33,8 +44,12 @@ public class UserManager implements UserService {
     @Override
     public void verify(int id) {
         User user=userDao.get(id);
-        user.setVerify(true);
-        System.out.println("Kullanıcı doğrulandı");
+        if (validationService.verify(user.getEmail(), user.getPassword())){
+            user.setVerify(true);
+            System.out.println("Kullanıcı doğrulandı");
+        }
+
+
     }
 
     @Override

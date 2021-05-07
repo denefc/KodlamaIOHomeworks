@@ -10,6 +10,7 @@ public interface UserDao {
     void update(User user);
     User get(int id);
     User getByEmail(String email);
+    User getByEmailAndPassword(String email,String password);
     List<User>getAll();
 
 }
